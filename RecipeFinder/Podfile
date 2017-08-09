@@ -7,5 +7,6 @@ target 'RecipeFinder' do
 
   # Pods for RecipeFinder
   pod 'Alamofire'
+  pod 'Alamofire-Synchronous', '~> 4.0'
   pod 'SwiftyJSON'
 end
