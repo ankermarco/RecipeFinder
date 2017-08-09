@@ -23,6 +23,7 @@ class RecipesViewController: UIViewController
     super.viewDidLoad()
     searchBar.delegate = self
     tableView.dataSource = self
+    tableView.delegate = self
 
     // Do any additional setup after loading the view.
   }
@@ -51,6 +52,8 @@ extension RecipesViewController: UISearchBarDelegate{
     }
     recipes = recipesInteractor.fetchRecipes()
     self.tableView.reloadData()
+    recipesInteractor = nil
+
   }
 }
 
@@ -70,4 +73,12 @@ extension RecipesViewController: UITableViewDataSource
     
     return cell
   }
+}
+
+extension RecipesViewController: UITableViewDelegate
+{
+  func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    self.searchBar.resignFirstResponder()
+  }
+  
 }

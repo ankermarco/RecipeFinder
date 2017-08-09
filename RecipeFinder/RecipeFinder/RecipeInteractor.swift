@@ -11,9 +11,10 @@ import Alamofire_Synchronous
 import SwiftyJSON
 
 
-class RecipeInteractor {
-  
+class RecipeInteractor
+{
   var requestUrl : String
+  var recipes = [Recipe]()
   
   init(_ url: String) {
     self.requestUrl = url
@@ -27,9 +28,20 @@ class RecipeInteractor {
     }
     return JSON.null
   }
+  
+  func fetchRecipes() -> [Recipe]
+  {
+    self.addRecipes()
+    
+    return self.recipes
+  }
 
-  func fetchRecipes() -> [Recipe] {
-    var recipes = [Recipe]()
+  func addRecipes(url:String? = nil)
+  {
+    if let url = url {
+      self.requestUrl = url
+    }
+    
     let value = self.getFromUrl()
 
     if value != JSON.null {
@@ -37,13 +49,15 @@ class RecipeInteractor {
         for item in items {
           if let title = item.dictionary?["title"]?.string {
             let recipe = Recipe(title)
-            recipes.append(recipe)
+            self.recipes.append(recipe)
           }
         }
       }
     }
     
-    return recipes
+    if self.recipes.count == 10 {
+      self.addRecipes( url: self.requestUrl.appending("&p=2") )
+    }
   }
 }
 
